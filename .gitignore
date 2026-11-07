@@ -1,0 +1,24 @@
+# Build
+build/
+out/
+
+# Gradle
+.gradle/
+.gradle
+gradle/
+gradle*
+.gradletasknamecache
+
+# IDE
+*.iml
+.idea/
+*.log
+
+# OS
+.DS_Store
+
+generated
+
+/data/poplavok.mv.db
+
+poplavok_db*
