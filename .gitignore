@@ -22,3 +22,7 @@ generated
 /data/poplavok.mv.db
 
 poplavok_db*
+
+# Node / build output
+node_modules/
+dist/
