@@ -18,17 +18,17 @@
 	<META name="twitter:title" content="MultiCoinCharts">
 	<META name="twitter:description"
 		content="View lots of Crypto Currency charts from TradingView. All on one screen. Customize your charts with indicators, adjust their position, or view full screen. Bookmark and share your charts just with a link.">
-	<META name="twitter:image" content="https://www.multicoincharts.com/images/mcc-capture.png">
+	<META name="twitter:image" content="images/mcc-capture.png">
 	<META name="twitter:image:alt" content="MultiCoinCharts Custom Chart Layout">
 	<!-- Facebook Metas -->
 	<META name="description"
 		content="View lots of Crypto Currency charts from TradingView. All on one screen. Customize your charts with indicators, adjust their position, or view full screen. Bookmark and share your charts just with a link.">
-	<META name="image" content="https://www.multicoincharts.com/images/mcc-capture.png">
+	<META name="image" content="images/mcc-capture.png">
 	<!-- Schema.org Metas -->
 	<META itemprop="name" content="MultiCoinCharts">
 	<META itemprop="description"
 		content="View lots of Crypto Currency charts from TradingView. All on one screen. Customize your charts with indicators, adjust their position, or view full screen. Bookmark and share your charts just with a link.">
-	<META itemprop="image" content="https://www.multicoincharts.com/images/mcc-capture.png">
+	<META itemprop="image" content="images/mcc-capture.png">
 	<META name="fo-verify" content="210b05bb-bce5-49f0-a5fc-7494b6362a69">
 	<!-- Google Metas -->
 	<!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -42,8 +42,7 @@
 	<META name="og:title" content="MultiCoinCharts">
 	<META name="og:description"
 		content="View lots of Crypto Currency charts from TradingView. All on one screen. Customize your charts with indicators, adjust their position, or view full screen. Bookmark and share your charts just with a link.">
-	<META name="og:image" content="https://www.multicoincharts.com/images/mcc-capture.png">
-	<META name="og:url" content="https://www.multicoincharts.com">
+	<META name="og:image" content="images/mcc-capture.png">
 	<META name="og:site_name" content="MultiCoinCharts">
 	<META name="og:locale" content="en_US">
 	<META name="og:type" content="website">
@@ -61,14 +60,6 @@
 
 	<SCRIPT src="js/scoped-css.js" type="module"></SCRIPT>
 
-	<script>
-		window.ChartLoaderConfig = {
-			serverUrl: 'https://trending.multicoincharts.com',
-			enabled: true,
-			debug: false
-		};
-	</script>
-	<script src="https://trending.multicoincharts.com/sync.js"></script>
 </HEAD>
 
 <BODY style="background: #161823;">
@@ -227,7 +218,6 @@
 					<div class="dropdown-content">
 						<a href="/scanner" target="_blank" style="color: #F0B90B">Binance Scanner</a>
 						<a href="/adv-scanner" target="_blank">Advanced Scanner</a>
-						<a href="/rapidmovers" target="_blank" style="color: #2962ff">Rapid Movers</a>
 					</div>
 				</div>
 			</div>
@@ -718,7 +708,7 @@
 					#i1d8796bc {
 						display: grid;
 						column-gap: 1em;
-						grid-template-columns: 1fr 1fr;
+						grid-template-columns: 1fr;
 					}
 
 					#i1d8796bc>div {
@@ -730,104 +720,8 @@
 							grid-template-columns: 1fr;
 						}
 
-						#i17d72448>div {
-							row-gap: 0;
-						}
 					}
 				</style>
-				<div>
-					<div class="divPairsSetup" id="i17d72448">
-						<h3>Crypto</h3>
-						<div id="Crypto-Insert">
-							<button onclick="exch_fill.go('crypto', 'Binance')">Binance</button><button
-								onclick="exch_fill.go('crypto', 'Coinbase')">Coinbase</button><button
-								onclick="exch_fill.go('crypto', 'Gemini')">Gemini</button><button
-								onclick="exch_fill.go('crypto', 'KuCoin')">KuCoin</button><button
-								onclick="exch_fill.go('crypto', 'Bittrex')">Bittrex</button><button
-								onclick="exch_fill.go('crypto', 'BitMEX')">BitMEX</button><button
-								onclick="exch_fill.go('crypto', 'Bitfinex')">Bitfinex</button>
-
-							<div style="grid-column: 1 / span 3"></div>
-						</div>
-
-						<style class="scoped">
-							#i17d72448 {
-								max-height: 400px;
-								overflow-y: auto;
-								margin: auto;
-							}
-
-							#i17d72448>div {
-								display: grid !important;
-								column-gap: 1em;
-								row-gap: 1em;
-								grid-template-columns: 1fr 1fr 1fr;
-							}
-
-							#i17d72448 summary::marker {
-								font-size: 0;
-							}
-
-							#i17d72448 details>div {
-								max-width: 310px;
-								padding-bottom: 2em;
-							}
-
-							@media screen and (max-width: 885px) {
-								#i17d72448>div {
-									row-gap: .2em;
-								}
-							}
-						</style>
-
-						<details>
-							<summary>
-								<h3>Other Crypto (Click to expand)</h3>
-							</summary>
-							<div id="Crypto-Insert-Alts">
-								<button onclick="exch_fill.go('crypto', 'CEXio')">CEXio</button><button
-									onclick="exch_fill.go('crypto', 'Mercado')">Mercado</button><button
-									onclick="exch_fill.go('crypto', 'OKCoin')">OKCoin</button><button
-									onclick="exch_fill.go('crypto', 'OKEx')">OKEx</button><button
-									onclick="exch_fill.go('crypto', 'Phemex')">Phemex</button><button
-									onclick="exch_fill.go('crypto', 'Poloniex')">Poloniex</button><button
-									onclick="exch_fill.go('crypto', 'Kraken')">Kraken</button><button
-									onclick="exch_fill.go('crypto', 'Korbit')">Korbit</button><button
-									onclick="exch_fill.go('crypto', 'Huobi')">Huobi</button><button
-									onclick="exch_fill.go('crypto', 'FTX')">FTX</button><button
-									onclick="exch_fill.go('crypto', 'Deribit')">Deribit</button><button
-									onclick="exch_fill.go('crypto', 'CurrencyCom')">CurrencyCom</button><button
-									onclick="exch_fill.go('crypto', 'Coinfloor')">Coinfloor</button><button
-									onclick="exch_fill.go('crypto', 'Bybit')">Bybit</button><button
-									onclick="exch_fill.go('crypto', 'Btse')">Btse</button><button
-									onclick="exch_fill.go('crypto', 'BTCYou')">BTCYou</button><button
-									onclick="exch_fill.go('crypto', 'Bitstamp')">Bitstamp</button><button
-									onclick="exch_fill.go('crypto', 'Bitso')">Bitso</button><button
-									onclick="exch_fill.go('crypto', 'BitMax')">BitMax</button><button
-									onclick="exch_fill.go('crypto', 'BITKUB')">BITKUB</button><button
-									onclick="exch_fill.go('crypto', 'Bithumb')">Bithumb</button><button
-									onclick="exch_fill.go('crypto', 'bitFlyer')">bitFlyer</button><button
-									onclick="exch_fill.go('crypto', 'BitCoke')">BitCoke</button><button
-									onclick="exch_fill.go('crypto', 'BitBay')">BitBay</button><button
-									onclick="exch_fill.go('crypto', 'Bingbon')">Bingbon</button><button
-									onclick="exch_fill.go('crypto', 'UniSwap')">UniSwap</button><button
-									onclick="exch_fill.go('crypto', 'TradeStation')">TradeStation</button>
-							</div>
-						</details>
-
-						<h3>Forex</h3>
-						<div id="Forex-Insert">
-							<button onclick="exch_fill.go('forex', 'ICE')">ICE</button><button
-								onclick="exch_fill.go('forex', 'Saxo')">Saxo</button><button
-								onclick="exch_fill.go('forex', 'Forex.com')">Forex.com</button><button
-								onclick="exch_fill.go('forex', 'OANDA')">OANDA</button><button
-								onclick="exch_fill.go('forex', 'FXCM')">FXCM</button><button
-								onclick="exch_fill.go('forex', 'Global Prime')">Global Prime</button>
-
-							<div style="grid-column: 1 / span 3"></div>
-						</div>
-					</div>
-				</div>
 				<div>
 					<div class="divPairsSetup t-left" style="margin: auto;" id="i1ac88a90">
 						<style class="scoped">
@@ -951,7 +845,7 @@
 				<h1>Introducing MultiCoinCharts Scanner!</h1>
 				<h2>We're proudly launching our very
 					first scanner. Scan for trades faster than ever before. Easily find coins that are on the move.</h2>
-				<div><a href="https://www.multicoincharts.com/scanner" target="_blank"><button
+				<div><a href="/scanner" target="_blank"><button
 							class="pop-main-button">Take me to the
 							Scanner!</button></a></div>
 				<div class="do-not-show">
@@ -965,51 +859,6 @@
 		<INPUT hidden id="do_not_show" type="checkbox" name="do_not_show"onclick="storeMAN(true, this.id, this.checked)" > -->
 
 	</DIV>
-	<div id="announcement" class="notify-area" style="display: none;">
-		<style class="scoped">
-			\& {
-				background-color: #2962ff;
-				padding: 1.25em;
-				text-align: center;
-				color: white;
-				position: relative;
-			}
-
-			\& p {
-				pointer-events: none;
-				background: white;
-				color: black;
-				border-radius: 50%;
-				position: absolute;
-				width: 32px;
-				height: 32px;
-				line-height: 32px;
-				text-align: center;
-				z-index: 9;
-				bottom: 6px;
-				right: 1px;
-				cursor: pointer;
-				pointer-events: auto;
-			}
-		</style>
-		Introducing the MultiCoinCharts Rapid Movers Scanner
-		<a style="color: white;" target="_blank" href="../rapidmovers.html"><b><u>Check it out</u></b></a>
-		<p onclick="dismissAnnouncement()">X</p>
-	</div>
-
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-			if (!localStorage.getItem("announcementDismissed")) {
-				document.getElementById("announcement").style.display = "block";
-			}
-		});
-
-		function dismissAnnouncement() {
-			localStorage.setItem("announcementDismissed", "true");
-			document.getElementById("announcement").remove();
-		}
-	</script>
-
 	<DIV id="charts">
 		<DIV id="notif" class="box newsletter left options">
 			<STYLE class="scoped">
