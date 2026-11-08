@@ -1,34 +1,3 @@
-const DFLT = { U: undefined, V: '(MCC 4.2)', Z: {} };
-
-class DefaultParameters {
-    constructor() { }
-
-    error(paramName = '', stack = '') {
-        let caller = stack.split('\n')[1].replace('@', '() - ');
-        throw 'The required ' + paramName + " parameter wasn't filled at: \nfunction " + caller + '.';
-    }
-
-    get div() {
-        this.error('div', (new Error()).stack);
-        return document.createElement('div');
-    }
-
-    get inp() {
-        this.error('input', (new Error()).stack);
-        return document.createElement('input');
-    }
-
-    get a() {
-        this.error('a', (new Error()).stack);
-        return document.createElement('a');
-    }
-
-    get crash() {
-        this.error('crash', (new Error()).stack);
-        return new Error();
-    }
-}
-
 class InputS {
     constructor(id = '', defaultValue) {
         this.element = document.createElement('input');
@@ -165,6 +134,7 @@ class BalloonButtonS {
         const anchor = document.createElement('a');
         anchor.innerHTML = label;
         anchor.className = className;
+        anchor.title = title;
         anchor.href = 'javascript:void(0)';
         anchor.onclick = onClick;
         return anchor;
@@ -201,7 +171,7 @@ class WidgetSettings {
 }
 
 class WidgetS {
-    constructor(symbol = '', settings = new WidgetSettings(), container = U.div, beforeElement = U.div) {
+    constructor(symbol = '', settings = new WidgetSettings(), container, beforeElement) {
         if (symbol === 'exit') {
             return;
         }
@@ -278,9 +248,9 @@ class ChartArrayT {
         this.names = [''];
         this.names.pop();
         this.bind = {
-            remove_chart: (box = U.div, symbol = '') => {
+            remove_chart: (box, symbol = '') => {
                 box.parentNode.removeChild(box);
-                this.pop(this.charts.indexOf(symbol));
+                this.pop(this.names.indexOf(symbol));
             }
         };
     }
@@ -351,78 +321,14 @@ class HTMLDragging {
     }
 }
 
-const exch_fill = {
-    forex: {
-        all: [
-            { name: 'ICE', id: 'FX_IDC' },
-            { name: 'Saxo', id: 'SAXO' },
-            { name: 'Forex.com', id: 'FOREXCOM' },
-            { name: 'OANDA', id: 'OANDA' },
-            { name: 'FXCM', id: 'FX' },
-            { name: 'Global Prime', id: 'GLOBALPRIME' }
-        ],
-        match(exchangeName = '', pattern = '') {
-            const exchange = this.all.find(entry => entry.name == exchangeName);
-            if (!exchange) {
-                return false;
-            }
-            return { name: exchange.id, pattern: pattern };
-        }
-    },
-    crypto: {
-        favored: ['Binance', 'Coinbase', 'Gemini', 'KuCoin', 'Bittrex', 'BitMEX', 'Bitfinex'],
-        rest: [
-            'CEXio',
-            'Mercado',
-            'OKCoin',
-            'OKEx',
-            'Phemex',
-            'Poloniex',
-            'Kraken',
-            'Korbit',
-            'Huobi',
-            'FTX',
-            'Deribit',
-            'CurrencyCom',
-            'Coinfloor',
-            'Bybit',
-            'Btse',
-            'BTCYou',
-            'Bitstamp',
-            'Bitso',
-            'BitMax',
-            'BITKUB',
-            'Bithumb',
-            'bitFlyer',
-            'BitCoke',
-            'BitBay',
-            'Bingbon',
-            'UniSwap',
-            'TradeStation'
-        ],
-        match(exchangeName = '', pattern = '') {
-            if (!this.favored.includes(exchangeName) && !this.rest.includes(exchangeName)) {
-                return false;
-            }
-            return { name: exchangeName.toUpperCase(), pattern: pattern };
-        }
-    },
-    async go(exchangeName = '', pattern = '') { },
-    async search(query = '', market = 'crypto') {
-        return [];
-    }
-};
-
 const OnLoad = {
     all: () => {
         OnLoad.loadHome();
-        OnLoad.show_close_ad();
         OnLoad.set_private_status();
         OnLoad.set_scan_status();
         OnLoad.set_indicators();
         const urlCharts = [];
         OnLoad.url_parse_chart_names(urlCharts);
-        OnLoad.url_parse_legacy_chart_names(urlCharts);
         OnLoad.clear_url_if_present(urlCharts);
         OnLoad.private_load(urlCharts);
         OnLoad.scan_load(urlCharts);
@@ -431,7 +337,6 @@ const OnLoad = {
         new HTMLDragging('.box');
         OnLoad.smallify(all.usesmallbutton.value);
         OnLoad.select_range_enable(all.range_or_interval.value);
-        OnLoad.insert_buttons_for_add_chart();
     },
     loadHome() {
         const noQuery = window.location.search.length === 0;
@@ -439,59 +344,39 @@ const OnLoad = {
             window.location.href = '/home/';
         }
     },
-    show_close_ad() { },
     set_private_status() {
         word.private = location.search.includes('&p=1');
     },
     set_scan_status() {
         word.scan = location.search.includes('&s=1');
     },
-    url_parse_legacy_chart_names: (charts = new ChartArrayT(U.crash)) => {
-        let regex = /[?&]chart(=([^&#]*)|&|#|$)/g;
-        let match = null;
-        const found = [];
-        while (match = regex.exec(location.search)) {
-            found.push(match[2].replace(/\+/g, ' '));
-        }
-        if (found.length) {
-            charts.push(...found);
-        }
-    },
-    url_parse_chart_names: (charts = new ChartArrayT(U.crash)) => {
+    url_parse_chart_names: (charts) => {
         const start = location.search.indexOf('c=');
         if (start < 0) {
             return;
         }
         let end = location.search.indexOf('&', start);
         end = end < 0 ? location.search.length : end;
-        const names = location.search.substring(start + 2, end).split(',');
+        const names = location.search.substring(start + 2, end).split(',').filter(name => name);
         if (names.length) {
             charts.push(...names);
         }
     },
-    url_profile_chart_names: (charts = new ChartArrayT(U.crash)) => {
+    url_profile_chart_names: (charts) => {
         if (charts.names.length > 0) {
             return;
         }
-        const profile = store_man('profile_select', '', false) || 'default';
-        if (!profile) {
-            return;
-        }
-        const saved = store_man('profile_' + profile, '', false);
+        const saved = store_man('profile_default', '', false);
         if (!saved) {
             return;
         }
         charts.push(...saved.split(','));
     },
-    url_fallback_chart_names: (charts = new ChartArrayT(U.crash)) => {
+    url_fallback_chart_names: (charts) => {
         if (charts.names.length > 0) {
             return;
         }
-        const legacy = store_man(word.STORAGE_CHARTSPAIRS, null, false);
-        if (legacy) {
-            charts.push(...legacy.split(','));
-        } else {
-            charts.push(...[
+        charts.push(...[
                 'COINBASE:BTCUSD',
                 'COINBASE:ETHUSD',
                 'COINBASE:LTCUSD',
@@ -500,8 +385,7 @@ const OnLoad = {
                 'KUCOIN:XRPUSDT',
                 'BINANCE:ADAUSDT',
                 'BINANCE:ETHBTC'
-            ]);
-        }
+        ]);
     },
     clear_url_if_present: (charts = ['']) => {
         if (word.scan) {
@@ -557,8 +441,7 @@ const OnLoad = {
     select_range_enable: (useRange = false) => {
         all.interval.element.disabled = useRange;
         all.range.element.disabled = !useRange;
-    },
-    insert_buttons_for_add_chart: () => { }
+    }
 };
 
 const OnChartChange = {
@@ -592,14 +475,14 @@ const OnChartChange = {
         const firstWithExchange = names.filter(name => name.includes(':'))[0];
         let title = firstWithExchange ? firstWithExchange.split(':')[0] : names[0];
         title = 'MultiCoinCharts: ' + title;
-        html.url.value = location.href;
-        html['url-twitter'].href = html['url-twitter'].dataset.original + location.href;
-        html['url-facebook'].href = html['url-facebook'].dataset.original + location.href;
-        html['url-reddit'].href = html['url-reddit'].dataset.original + location.href;
         document.title = title;
         try {
             history.replaceState(null, title, url);
         } catch (error) { }
+        html.url.value = location.href;
+        html['url-twitter'].href = html['url-twitter'].dataset.original + location.href;
+        html['url-facebook'].href = html['url-facebook'].dataset.original + location.href;
+        html['url-reddit'].href = html['url-reddit'].dataset.original + location.href;
     },
     save_charts: (names = [''], profile = 'default') => {
         store_man('profile_' + profile, names.join(','));
@@ -624,52 +507,9 @@ const OnChartRearrange = {
     }
 };
 
-const U = new DefaultParameters();
-
 const word = {
     private: false,
-    scan: false,
-    DEBUGMODE: false,
-    STORAGE_CHARTSPAIRS: 'chartPairs',
-    elements: [
-        'charts',
-        'nav',
-        'pairsInputautocomplete-list',
-        'chart_name',
-        'chart_names',
-        'box_space',
-        'chart_adder',
-        'notif',
-        'configChart',
-        'theme-toggle',
-        'url',
-        'modalAd',
-        'modalConfig',
-        'modalMCC',
-        'box_space_img',
-        'modalUs',
-        'profile_select',
-        'config_reveal',
-        'share_reveal',
-        'charts_order',
-        'chart_add',
-        'chart_options',
-        'modalIndicators',
-        'features',
-        'chart_add_select',
-        'link_set',
-        'box_space_google',
-        'box_space_google2',
-        'top_space',
-        'top_space_html',
-        'top_space_img',
-        'top_space_google',
-        'Crypto-Insert',
-        'Forex-Insert',
-        'Crypto-Insert-Alts',
-        'ad-text-anchor'
-    ],
-    links: [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']]
+    scan: false
 };
 
 const html = window;
@@ -690,15 +530,13 @@ const all = {
     range_or_interval: new CheckBoxS('range_or_interval', false),
     dark: new CheckBoxS('dark', true),
     widget_settings: new WidgetSettings(),
-    charts: new ChartArrayT('chartPairs', false),
-    profile: new TextBoxS('profile_select', 'default'),
+    charts: new ChartArrayT(),
     studies: new CheckArrayS('studies', [])
 };
 
 function initPage() {
     setTimeout(() => {
         document.getElementById('loading').classList.add('hide');
-        html.features.innerHTML += DFLT.V;
         OnChartChange.all();
     }, 250);
     document.addEventListener('keydown', function (event) {
@@ -711,7 +549,6 @@ function initPage() {
     const language = navigator.language.includes('-') ? navigator.language.split('-')[0] : 'en';
     all.widget_settings = new WidgetSettings(all.interval.value, all.timezone.value, all.dark.value, all.style.value, language, '#f1f3f6', all.hide_legend.value, all.hide_side_toolbar.value, all.hide_top_toolbar.value, true, all.withdateranges.value, all.details.value, true, all.range.value, all.studies.value, all.range_or_interval.value);
     OnLoad.all();
-    V_load();
     location.hash = 'nav';
     all.width.element.addEventListener('change', OnSizeChange.all, true);
     all.height.element.addEventListener('change', OnSizeChange.all, true);
@@ -720,14 +557,6 @@ function initPage() {
     location.hash = 'nav';
 }
 
-function V_link() {
-    const count = 10;
-    const index = Math.random() * count >> 0;
-    return;
-}
-
-function V_load() { }
-
 const XDirectUI = {
     visibility(id = '') {
         if (!html[id]) {
@@ -735,10 +564,6 @@ const XDirectUI = {
         } else {
             html[id].classList.toggle('hide');
         }
-    },
-    random() {
-        const symbols = ['BINANCE:BTCUSDT', 'BINANCE:ETHUSD', 'BINANCE:LTCBTC', 'BINANCE:DOGEBTC'];
-        all.charts.push(symbols[Math.floor(Math.random() * symbols.length)]);
     },
     choose_indicators() {
         all.studies.value = INDICATORS.filter(study => window[study].checked);
@@ -789,73 +614,30 @@ const XDirectUI = {
 };
 
 const ZDirectUI = {
-    clipboard(input = U.inp) {
+    clipboard(input) {
         input.select();
         document.execCommand('copy');
         input.blur();
         alert('Link Copied.');
     },
-    fullscreen(element = U.div) {
-        if (navigator.userAgent.includes('Chrome')) {
-            if (document.isFullScreen || document.fullscreenElement) {
-                if ('exitFullscreen' in document) {
-                    document.exitFullscreen();
-                }
-            } else {
-                if ('requestFullscreen' in element) {
-                    element.requestFullscreen();
-                }
-            }
+    fullscreen(element) {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else if (element.requestFullscreen) {
+            element.requestFullscreen();
         } else {
             element.classList.toggle('fullscreen');
         }
     }
 };
 
-async function X_add(text = '', submit = false, results = [], exchange = '') {
-    const list = html.chart_options;
-    const addChart = (symbol = '') => {
-        all.charts.push(symbol);
-        alert('Added ' + symbol + '.');
-    };
-    const clearList = () => {
-        while (list.firstChild) {
-            list.removeChild(list.firstChild);
-        }
-    };
-    list.classList.toggle('border-none', true);
-    text = text.toUpperCase();
-    if (submit) {
-        return addChart(text);
-    }
-    if (text.length === 1) {
-        clearList();
-    }
-    if (text.length < 2) {
+function X_add(text = '', submit = false) {
+    const symbol = text.trim().toUpperCase();
+    if (!submit || !symbol) {
         return;
     }
-    list.classList.toggle('border-none', false);
-    clearList();
-    if (!results.length) {
-        const results = await exch_fill.search(text);
-        results.forEach(result => {
-            const item = document.createElement('li');
-            let symbol = result.exchange + ':' + result.symbol;
-            item.innerHTML = symbol;
-            symbol = item.innerText;
-            item.onclick = () => addChart(symbol);
-            item.innerHTML = '<strong> ' + result.exchange + ':' + result.symbol + '</strong> <br> ' + result.description + ' ';
-            list.appendChild(item);
-        });
-    } else {
-        results.forEach(result => {
-            const item = document.createElement('li');
-            const symbol = exchange + ':' + result.symbol;
-            item.onclick = () => addChart(symbol);
-            item.innerText = symbol;
-            list.appendChild(item);
-        });
-    }
+    all.charts.push(symbol);
+    alert('Added ' + symbol + '.');
 }
 
 function store_inp(input = new NumBoxS(), useValue = true) {
@@ -877,12 +659,8 @@ function store_man(key = '', value = '', write = true) {
             return localStorage.getItem(key);
         }
     } catch (error) {
-        alert(JSON.stringify(error));
+        console.warn('localStorage error:', error);
     }
-}
-
-function doLOG(message = '', ...args) {
-    return;
 }
 
 function storeMAN(write = true, key = '', value = '') {
