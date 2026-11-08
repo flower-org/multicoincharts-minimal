@@ -1,6 +1,6 @@
 {
   "name": "multicoincharts-minimal",
-  "version": "1.0.0",
+  "version": "9.0.0",
   "private": true,
   "description": "MultiCoinCharts static site",
   "type": "module",
