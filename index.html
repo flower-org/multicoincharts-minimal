@@ -29,7 +29,6 @@
 	<META itemprop="description"
 		content="View lots of Crypto Currency charts from TradingView. All on one screen. Customize your charts with indicators, adjust their position, or view full screen. Bookmark and share your charts just with a link.">
 	<META itemprop="image" content="images/mcc-capture.png">
-	<META name="fo-verify" content="210b05bb-bce5-49f0-a5fc-7494b6362a69">
 	<!-- Google Metas -->
 	<!-- Open Graph Metas -->
 	<META name="og:title" content="MultiCoinCharts">
@@ -770,76 +769,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- <DIV ID="popup" class="modalConfig hide">
-			<STYLE class="scoped">
-				.do-not-show {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					padding-top: 1em;
-				}
-
-
-				.popup-wrapper {
-					background-color: #1e222d;
-					overflow-x: hidden;
-					overflow-y: auto;
-					padding: 40px;
-					position: relative;
-					width: 720px;
-				}
-
-				.pop-main-button {
-					display: block;
-					margin: auto;
-					background-color: #2962ff;
-					color: white;
-					border-radius: 28px;
-					border-width: 1px;
-					height: 56px;
-					outline: none;
-					overflow: visible;
-					padding: 0 31px;
-					position: relative;
-					border-style: none;
-					font-size: 1.2em;
-				}
-
-				\& a {
-					text-decoration: none;
-				}
-
-				\& h1 {
-					color: #d1d4dc;
-					text-align: center;
-					font-size: 36px;
-				}
-
-				\& h2 {
-					color: #d1d4dc;
-					text-align: center;
-					padding-bottom: 1.7em;
-					font-size: 18px;
-				}
-			</STYLE>
-			 <div class="popup-wrapper">
-				<button href="javascript:void(0)" onclick="XDirectUI.visibility('popup')" type="button"
-					class="close-button"><span class="close-icon-3unB1Yrw"></span></a><svg
-						xmlns="http://www.w3.org/2000/svg" width="23" height="23">
-						<path stroke="currentColor" stroke-width="1.2" d="M1 1l21 21m0-21L1 22"></path>
-					</svg></span></button>
-				<h1>Introducing MultiCoinCharts Scanner!</h1>
-				<h2>We're proudly launching our very
-					first scanner. Scan for trades faster than ever before. Easily find coins that are on the move.</h2>
-				<div class="do-not-show">
-					<INPUT id="do_not_show" type="checkbox" name="do_not_show"onclick="storeMAN(true, this.id, this.checked)" >
-					<p>Do Not Show Again</p>
-				</div>
-
-			</div>
-		</DIV> -->
-		<!-- <DIV hidden ID="popup"> </DIV>
-		<INPUT hidden id="do_not_show" type="checkbox" name="do_not_show"onclick="storeMAN(true, this.id, this.checked)" > -->
 
 	</DIV>
 	<DIV id="charts">
@@ -918,32 +847,26 @@
 			<H1>MultiCoinCharts</H1>
 			<P>by @leasj</P>
 			<P id="pCrashCounter"></P> <BR>
-			<A id="aCrashRefresh" href="javascript:void(0)" style="display: none;"
-				onclick="localStorage.clear(); location.href= location.href.includes('?') ? location.href + `&p=1`:location.href + '?p=1' ">
-				Click to refresh browser cache
+			<A id="aCrashRefresh" href="javascript:void(0)" style="display: none;" onclick="location.reload()">
+				Click to reload
 			</A>
 		</DIV>
 	</DIV>
 	<SCRIPT async type="text/javascript" src="js/copypasta.js?v11"></SCRIPT>
 	<SCRIPT>
 		let load_counter = 0;
-		onerror = function (_, _, _, _, err) { return !err }
-		void (function fireWhenReady() {
-			try {
-				eval("initPage;all;TradingView")
-			} catch (error) {
-				load_counter++
-				if (load_counter >= 6) {
-					pCrashCounter.innerText =
-						"Crashed: still waiting for TradingView for " + ((load_counter / 2) >> 0) + " seconds."
-					aCrashRefresh.style.display = "block"
-				}
-
-				setTimeout(fireWhenReady, 500)
-				throw undefined
+		(function fireWhenReady() {
+			const missing = [];
+			if (typeof TradingView === 'undefined') missing.push('TradingView');
+			if (typeof initPage === 'undefined' || typeof all === 'undefined') missing.push('copypasta.js');
+			if (!missing.length) return initPage();
+			load_counter++;
+			if (load_counter >= 6) {
+				pCrashCounter.innerText = 'Still waiting for ' + missing.join(' and ') + ' for ' + (load_counter >> 1) + ' seconds.';
+				aCrashRefresh.style.display = 'block';
 			}
-			return initPage()
-		})()
+			setTimeout(fireWhenReady, 500);
+		})();
 	</SCRIPT>
 
 </BODY>
