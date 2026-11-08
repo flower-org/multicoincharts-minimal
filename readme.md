@@ -33,3 +33,37 @@ with no console errors:
 5. Favicon is shown.
 
 Note: `http.server` doesn't resolve extensionless links such as `/adv-scanner`, so those return 404 on both ports.
+
+## GitHub Actions
+
+### Reusable minify action
+
+`.github/actions/minify/action.yml` runs `npm ci && npm run build` on the copy of the site that contains it and exposes
+the result as the `dist-path` output.
+
+```yaml
+# In this repo
+- uses: ./.github/actions/minify
+  id: mcc
+
+# From a repo that has this one as a submodule (builds exactly the pinned commit; requires checkout with submodules: true)
+- uses: ./path/to/multicoincharts-minimal/.github/actions/minify
+  id: mcc
+
+# From any other repo
+- uses: flower-org/multicoincharts-minimal/.github/actions/minify@<tag-or-sha>
+  id: mcc
+
+- run: ls ${{ steps.mcc.outputs.dist-path }}
+```
+
+Inputs: `node-version` (default `22`), `setup-node` (default `true`; set `false` if Node.js is already set up).
+
+### Release
+
+Pushing a version tag (e.g. `1.0.0`) runs `.github/workflows/release.yml`, which builds with the action above and
+attaches `multicoincharts-<tag>.zip` to a GitHub Release:
+
+```bash
+git tag 1.0.0 && git push origin 1.0.0
+```

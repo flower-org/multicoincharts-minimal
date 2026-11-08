@@ -1,0 +1,48 @@
+name: Minify MultiCoinCharts
+description: >
+  Minifies the MultiCoinCharts static site (npm run build) into dist/.
+  Builds the copy of the site that contains this action, so it can be used as
+  `uses: ./.github/actions/minify` in this repo, via the same path inside a submodule checkout, or as
+  `uses: flower-org/multicoincharts-minimal/.github/actions/minify@<ref>` from other repositories.
+
+inputs:
+  node-version:
+    description: Node.js version to set up.
+    required: false
+    default: '22'
+  setup-node:
+    description: Set to 'false' to skip actions/setup-node when Node.js is already available.
+    required: false
+    default: 'true'
+
+outputs:
+  dist-path:
+    description: Absolute path to the built dist/ directory.
+    value: ${{ steps.site.outputs.root }}/dist
+
+runs:
+  using: composite
+  steps:
+    # This action lives in <site root>/.github/actions/minify
+    - name: Locate site root
+      id: site
+      shell: bash
+      run: |
+        root="$(cd "$GITHUB_ACTION_PATH/../../.." && pwd)"
+        # Git Bash on Windows yields /d/a/... paths; convert to native form for working-directory and callers
+        if [ "$RUNNER_OS" = "Windows" ]; then root="$(cygpath -w "$root")"; fi
+        echo "root=$root" >> "$GITHUB_OUTPUT"
+
+    # No npm cache: setup-node only hashes lockfiles inside the caller's workspace, which this action may be outside of
+    - name: Set up Node.js
+      if: inputs.setup-node == 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install dependencies and build
+      shell: bash
+      working-directory: ${{ steps.site.outputs.root }}
+      run: |
+        npm ci --no-audit --no-fund
+        npm run build

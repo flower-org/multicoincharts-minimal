@@ -12,7 +12,7 @@ const OUT = join(ROOT, 'dist');
 const EXCLUDE = new Set([
     '.git', '.github', '.idea', '.vscode', 'node_modules', 'dist',
     '.gitignore', '.DS_Store', 'package.json', 'package-lock.json',
-    'build.mjs', 'action.yml', 'readme.md',
+    'build.mjs', 'readme.md',
 ]);
 
 // Top-level names must survive: HTML event handlers and other scripts reference them as globals.

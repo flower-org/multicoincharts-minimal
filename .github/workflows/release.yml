@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    env:
+      ARCHIVE_DIR: multicoincharts-${{ github.ref_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Minify site
+        id: minify
+        uses: ./.github/actions/minify
+
+      - name: Archive dist
+        run: |
+          cp -r "${{ steps.minify.outputs.dist-path }}" "$ARCHIVE_DIR"
+          zip -qr "$ARCHIVE_DIR.zip" "$ARCHIVE_DIR"
+          ls -al "$ARCHIVE_DIR.zip"
+
+      - name: sha256-zip
+        run: openssl sha256 "$ARCHIVE_DIR.zip"
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ARCHIVE_DIR }}.zip
