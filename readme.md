@@ -42,6 +42,11 @@ Note: `http.server` doesn't resolve extensionless links such as `/adv-scanner`, 
 the result as the `dist-path` output.
 
 ```yaml
+# Node.js must be set up by the caller
+- uses: actions/setup-node@v4
+  with:
+    node-version: '22'
+
 # In this repo
 - uses: ./.github/actions/minify
   id: mcc
@@ -57,7 +62,8 @@ the result as the `dist-path` output.
 - run: ls ${{ steps.mcc.outputs.dist-path }}
 ```
 
-Inputs: `node-version` (default `22`), `setup-node` (default `true`; set `false` if Node.js is already set up).
+No inputs. The action contains no nested actions on purpose: a nested action with a post step (like `setup-node`) makes
+the runner re-read this `action.yml` at job end, which fails if the caller has deleted the site sources by then.
 
 ### Release
 

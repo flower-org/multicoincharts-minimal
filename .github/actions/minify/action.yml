@@ -4,16 +4,10 @@ description: >
   Builds the copy of the site that contains this action, so it can be used as
   `uses: ./.github/actions/minify` in this repo, via the same path inside a submodule checkout, or as
   `uses: flower-org/multicoincharts-minimal/.github/actions/minify@<ref>` from other repositories.
-
-inputs:
-  node-version:
-    description: Node.js version to set up.
-    required: false
-    default: '22'
-  setup-node:
-    description: Set to 'false' to skip actions/setup-node when Node.js is already available.
-    required: false
-    default: 'true'
+  !!! WARNING !!! Requires Node.js on PATH: callers must run actions/setup-node first. It is deliberately not nested
+  here, because any nested action with a post step makes the runner re-read this action.yml at job end, which fails
+  if the caller has deleted the site sources by then (as callers typically do, to package only the minified site
+  without build files like this action.yml).
 
 outputs:
   dist-path:
@@ -32,13 +26,6 @@ runs:
         # Git Bash on Windows yields /d/a/... paths; convert to native form for working-directory and callers
         if [ "$RUNNER_OS" = "Windows" ]; then root="$(cygpath -w "$root")"; fi
         echo "root=$root" >> "$GITHUB_OUTPUT"
-
-    # No npm cache: setup-node only hashes lockfiles inside the caller's workspace, which this action may be outside of
-    - name: Set up Node.js
-      if: inputs.setup-node == 'true'
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ inputs.node-version }}
 
     - name: Install dependencies and build
       shell: bash
