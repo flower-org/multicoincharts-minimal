@@ -1,12 +1,12 @@
 ```
-Oct 31, 2026
+Nov 8, 2026
 442521
 multicoincharts-9.0.1.zip
 SHA2-256(multicoincharts-9.0.1.zip)= 064bc51b674d54c1e980630b820a964ea1f7f67d0a68d17610f7a7b218bda4ac
 ```
 
 ```
-Oct 31, 2026
+Nov 8, 2026
 442236
 multicoincharts-9.0.0.zip
 145d75356ff656f67262028f37f47f0f43b3007e6dcad02d3b6b193584718432
